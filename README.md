@@ -106,7 +106,7 @@ Emitted when a "status" message is received from the RFXtrx 433.
 
 "receive"
 ---------
-Emitted when any message is received from the RFXtrx 433, sends the raw bytes received.
+Emitted when any message is received from the RFXtrx 433, sends the raw bytes that were received.
 
 "elec2"
 -------
