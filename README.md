@@ -19,7 +19,7 @@ To Use
 ------
 
 <pre>
-var rfxcom = require('./rfxcom'),
+var rfxcom = require('rfxcom'),
     pg = require('pg').native,
     conString = "pg://user:password@localhost/user",
     client = new pg.Client(conString);
@@ -55,19 +55,25 @@ LightwaveRf
 There's a specialised Lighting5 prototype, which uses an RfxCom object.
 
 <pre>
-    var rfxtrx = new rfxcom.RfxCom("/dev/ttyUSB0", {debug: true}),
-        lightwaverf = new rfxcom.Lighting5(rfxtrx, rfxcom.lighting5.LIGHTWAVERF);
+var rfxcom = require('rfxcom');
 
-    lightwaverf.switchOn("0xF09AC8/1", {mood: 0x03});
-    lightwaverf.switchOn("0xF09AC8/2", {level: 0x10});
+var rfxtrx = new rfxcom.RfxCom("/dev/ttyUSB0", {debug: true}),
+    lightwaverf = new rfxcom.Lighting5(rfxtrx, rfxcom.lighting5.LIGHTWAVERF);
+
+rfxtrx.initialise(function () {
+  console.log("Device initialised");
+  lightwaverf.switchOn("0xF09AC8/1", {mood: 0x03});
+  lightwaverf.switchOn("0xF09AC8/2", {level: 0x10});
+});
 </pre>
 
 I've tested it with both LightwaveRf lights, and the relay switch.
 
 LightwaveRf lights get their identity from the remote used to pair, if you don't
 have a remote, or if you want to specify the address manually, you can pair the
-device and send lightwaverf.switchOn("<insert address>") to unpair, send
-lightwave.switchOff("<insert address>") while the device is awaiting pairing.
+device by putting the device into pairing mode and turning on a device id, lightwaverf.switchOn("0xFFFFFF/1").
+
+The device ids don't have to be unique, but it's advisable.
 
 Lighting2
 ---------
@@ -103,6 +109,10 @@ is for.
 "status"
 --------
 Emitted when a "status" message is received from the RFXtrx 433.
+
+"end"
+--------
+Emitted when the serial port "ends".
 
 "receive"
 ---------
